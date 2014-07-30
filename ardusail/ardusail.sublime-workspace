@@ -1,0 +1,492 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"in",
+				"include"
+			],
+			[
+				"gcs",
+				"gcs_update"
+			],
+			[
+				"star",
+				"startupSensor"
+			],
+			[
+				"AS_S",
+				"AS_Sensor"
+			],
+			[
+				"_",
+				"_lastUpdateMillis"
+			],
+			[
+				"re",
+				"return"
+			],
+			[
+				"upd",
+				"updateMillis"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "GCS_MavLink.ino",
+			"settings":
+			{
+				"buffer_size": 3482,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "ardusail.ino",
+			"settings":
+			{
+				"buffer_size": 3012,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "stino.settings",
+			"settings":
+			{
+				"buffer_size": 204,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "nav_mode.ino",
+			"settings":
+			{
+				"buffer_size": 677,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "navigaton.ino",
+			"settings":
+			{
+				"buffer_size": 763,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "radio.ino",
+			"settings":
+			{
+				"buffer_size": 691,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/RC_Channel/RC_HAL.h",
+			"settings":
+			{
+				"buffer_size": 790,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/FastSerial/FastSerial.h",
+			"settings":
+			{
+				"buffer_size": 10254,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 287.0,
+		"selected_items":
+		[
+			[
+				"",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"Package Control: pa",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: inst",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/ardusail/ardusail.ino.cpp",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/Adafruit_Sensor/Adafruit_Sensor.cpp",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/ardusail/GCS_MavLink.ino",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/ardusail/nav_mode.ino",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/ardusail/navigaton.ino",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/ardusail/radio.ino",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/ardusail/navigation.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/ardusail/GCS_MavLink.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/CGS_Mavlink/CGS_MAVLink.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/RC_Channel/RC_Channel.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/RC_Channel/RC_HAL.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/AS_Sensor/AS_Sensor.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/AS_Scheduler/AS_Scheduler.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/AS_Menu/AS_Menu.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/AS_GPS/AS_GPS.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/ardusail/radio.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/ardusail/nav_mode.h",
+		"/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/AS_Sensor/AS_Sensor.cpp"
+	],
+	"find":
+	{
+		"height": 0.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": true,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "GCS_MavLink.ino",
+					"settings":
+					{
+						"buffer_size": 3482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Stino-master/Arduino.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "ardusail.ino",
+					"settings":
+					{
+						"buffer_size": 3012,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23,
+								23
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Stino-master/Arduino.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "stino.settings",
+					"settings":
+					{
+						"buffer_size": 204,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "nav_mode.ino",
+					"settings":
+					{
+						"buffer_size": 677,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Stino-master/Arduino.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "navigaton.ino",
+					"settings":
+					{
+						"buffer_size": 763,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Stino-master/Arduino.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "radio.ino",
+					"settings":
+					{
+						"buffer_size": 691,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Stino-master/Arduino.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/RC_Channel/RC_HAL.h",
+					"settings":
+					{
+						"buffer_size": 790,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								120,
+								120
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 21.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/Users/andreaterzani/Desktop/Arduino/master_sail/Libraries/FastSerial/FastSerial.h",
+					"settings":
+					{
+						"buffer_size": 10254,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 472.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.AS_Sensor":
+	{
+		"height": 333.0
+	},
+	"output.Adafruit_Sensor":
+	{
+		"height": 112.0
+	},
+	"output.ardusail":
+	{
+		"height": 284.0
+	},
+	"output.exec":
+	{
+		"height": 197.0
+	},
+	"output.stino_log":
+	{
+		"height": 112.0
+	},
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 327.0,
+	"status_bar_visible": true
+}
