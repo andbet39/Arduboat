@@ -76,11 +76,11 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
 	{ update_heading,            2,   100 },
 	{ check_nav_mode,             10,   100 },
       {gps_update,                10,100},
-//      { gcs_send_attitude,        5,   200 },
+    { gcs_send_attitude,        5,   200 },
       { gcs_send_heartbeat,		50,	  100},
 //      { gcs_send_servo_out, 5,         200},
 //      { gcs_send_servo_in, 5,         200},		
-      { gcs_send_position, 10,         200},		
+      { gcs_send_position, 20,         200}	
 	//{gcs_update,1,200}
 	
 
@@ -124,7 +124,7 @@ void setup() {
 
 void loop() {
 	
-  gcs_update();
+  //gcs_update();
 
   if(!sensor.getSample()){
     return;

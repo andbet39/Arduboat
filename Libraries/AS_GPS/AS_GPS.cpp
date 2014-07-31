@@ -7,6 +7,18 @@ Adafruit_GPS GPS(&Serial1);
 boolean usingInterrupt = false;
 void useInterrupt(boolean); // Func prototype keeps Arduino 0023 happy
 
+
+double toDeg(float val){
+
+  double degree= floor(val/100);
+  double decpos=degree+(val-(degree*100))/60;
+
+  return decpos;
+
+}
+
+
+
 void AS_GPS::init()
 {
 	
@@ -67,17 +79,19 @@ void AS_GPS::getSample()
   }
 
 
-	lat=415122304;//(GPS.latitude*100000.0);
-	lon=122593384;//(GPS.longitude*100000.0);
-	alt=GPS.altitude*1000;
+	float gps_lat=GPS.latitude;
+	float gps_lon=GPS.longitude;
 	
+  
+  lat=toDeg(gps_lat)*10000000;
+  lon=toDeg(gps_lon)*10000000;
+
+  alt=GPS.altitude*1000;
 	angle=GPS.angle*100;
 	
-	fix=GPS.fix;
+  fix=GPS.fix;
 	satellites=GPS.satellites;
 	
 	
 }
  
-
-
