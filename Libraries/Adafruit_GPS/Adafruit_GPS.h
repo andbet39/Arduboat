@@ -20,13 +20,7 @@ All text above must be included in any redistribution
 #ifndef _ADAFRUIT_GPS_H
 #define _ADAFRUIT_GPS_H
 
-#ifdef __AVR__
-  #if ARDUINO >= 100
-    #include <AltSoftSerial/AltSoftSerial.h>
-  #else
-    #include <NewSoftSerial.h>
-  #endif
-#endif
+#include <FastSerial.h>
 
 // different commands to set the update rate from once a second (1 Hz) to 10 times a second (10Hz)
 #define PMTK_SET_NMEA_UPDATE_1HZ  "$PMTK220,1000*1F"
@@ -71,29 +65,14 @@ All text above must be included in any redistribution
 // how long to wait when we're looking for a response
 #define MAXWAITSENTENCE 5
 
-#if ARDUINO >= 100
- #include "Arduino.h"
-#if defined (__AVR__) && !defined(__AVR_ATmega32U4__)
- #include "AltSoftSerial/AltSoftSerial.h"
-#endif
-#else
- #include "WProgram.h"
- #include "NewSoftSerial.h"
-#endif
+#include "Arduino.h"
 
 
 class Adafruit_GPS {
  public:
   void begin(uint16_t baud); 
 
-#ifdef __AVR__
-  #if ARDUINO >= 100 
-    Adafruit_GPS(AltSoftSerial *ser); // Constructor when using AltSoftSerial
-  #else
-    Adafruit_GPS(NewSoftSerial  *ser); // Constructor when using NewSoftSerial
-  #endif
-#endif
-  Adafruit_GPS(HardwareSerial *ser); // Constructor when using HardwareSerial
+ Adafruit_GPS(FastSerial *ser); // Constructor when using HardwareSerial
 
   char *lastNMEA(void);
   boolean newNMEAreceived();
@@ -129,14 +108,8 @@ class Adafruit_GPS {
   boolean paused;
   
   uint8_t parseResponse(char *response);
-#ifdef __AVR__
-  #if ARDUINO >= 100
-    AltSoftSerial *gpsSwSerial;
-  #else
-    NewSoftSerial  *gpsSwSerial;
-  #endif
-#endif
-  HardwareSerial *gpsHwSerial;
+  FastSerial *gpsHwSerial;
+
 };
 
 

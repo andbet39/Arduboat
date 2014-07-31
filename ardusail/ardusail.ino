@@ -1,5 +1,6 @@
 #include <FastSerial.h>
 #include <Arduino.h>
+
 #include "GCS_Mavlink.h"
 #include "navigation.h"
 #include "nav_mode.h"
@@ -7,20 +8,13 @@
 
 
 
-#define NO_PORTA_PINCHANGES
-#define NO_PORTB_PINCHANGES
-#define NO_PORTC_PINCHANGES
-#define NO_PORTB_PINCHANGES // to indicate that port b will not be used for pin change interrupts
-#define NO_PORTJ_PINCHANGES // to indicate that port c will not be used for pin change interrupts
-#define NO_PORTK_PINCHANGES
-
 #include <stdint.h>
 #include <Wire.h>
 #include <Servo.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_LSM303_U.h>
 #include <Adafruit_9DOF.h>
-//#include <Adafruit_GPS.h>
+#include <Adafruit_GPS.h>
 #include <AS_Math.h>
 #include <AS_Scheduler.h>
 #include <AS_Sensor.h>
@@ -46,6 +40,7 @@ RC_Channel sailChannel;
 RC_Channel auxChannel;
 
 FastSerialPort0(Serial);
+FastSerialPort1(Serial1);
 
 #define PID_HEADING_SCALER 2.0
 
@@ -75,15 +70,17 @@ static CGS_MAVLink   gcs;
 
 
 static const AS_Scheduler::Task scheduler_tasks[] = {
-//	{ read_radio,				 1,   100 },
-//	{ fast_loop,               1,   100 },
-//	{ write_radio,				1,100},
-//	{ update_heading,            2,   100 },
-//	{ check_nav_mode,             10,   100 },
-      { gcs_send_attitude,        5,   200 },
+	{ read_radio,				 1,   100 },
+	{ fast_loop,               1,   100 },
+	{ write_radio,				1,100},
+	{ update_heading,            2,   100 },
+	{ check_nav_mode,             10,   100 },
+      {gps_update,                10,100},
+//      { gcs_send_attitude,        5,   200 },
       { gcs_send_heartbeat,		50,	  100},
-      { gcs_send_servo_out, 5,         200},
-      { gcs_send_servo_in, 5,         200},		
+//      { gcs_send_servo_out, 5,         200},
+//      { gcs_send_servo_in, 5,         200},		
+      { gcs_send_position, 10,         200},		
 	//{gcs_update,1,200}
 	
 
@@ -91,43 +88,43 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
 
 
 void setup() {
-
-  RC_HAL *hal=RC_HAL::getInstance();
-  
-  hal->init();
-  
-  current_nav_mode=NAV_MODE_MANUAL;
-  
-  headingPID.SetOutputLimits(-500,500);
-  gcs.init();
-//  gps.init();
-
-rudderChannel.init(5,1);
-sailChannel.init(6,2);
-auxChannel.init(7,3);
-
-
-init_navigation();
-
-
-Serial.print( "Start init sensor");
-sensor.init(UPDATE_SENSOR_TIME);
-
-
-Serial.print( "Start init scheduler");
-scheduler.init(&scheduler_tasks[0], sizeof(scheduler_tasks)/sizeof(scheduler_tasks[0]));
-
-
-
-last_millis=0;
-elapsed=0;
+    
+      RC_HAL *hal=RC_HAL::getInstance();
+      
+      hal->init();
+      
+      current_nav_mode=NAV_MODE_MANUAL;
+      
+      headingPID.SetOutputLimits(-500,500);
+      gcs.init();
+      gps.init();
+    
+    rudderChannel.init(6,1);
+    sailChannel.init(7,2);
+    auxChannel.init(8,3);
+    
+    
+    init_navigation();
+    
+    
+    Serial.print( "Start init sensor");
+    sensor.init(UPDATE_SENSOR_TIME);
+    
+    
+    Serial.print( "Start init scheduler");
+    scheduler.init(&scheduler_tasks[0], sizeof(scheduler_tasks)/sizeof(scheduler_tasks[0]));
+    
+    
+    
+    last_millis=0;
+    elapsed=0;
 
 }
 
 
 void loop() {
 	
-//  gcs_update();
+  gcs_update();
 
   if(!sensor.getSample()){
     return;
@@ -143,7 +140,6 @@ static void gps_update(){
 	
 	gps.getSample();
 	
-	//Serial.print(gps.fix);
 }
 
 

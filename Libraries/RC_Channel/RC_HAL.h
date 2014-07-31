@@ -13,9 +13,9 @@
 #include <stdint.h>
 
 
-#define P1IN 2
-#define P2IN 3
-#define P3IN 4
+#define P1IN 10
+#define P2IN 11
+#define P3IN 12
 
 #define MAX_CHANNEL 3
 

@@ -12,7 +12,7 @@
 // and help support open source hardware & software! -ada
 
 #include <Adafruit_GPS.h>
-#include <SoftwareSerial.h>
+#include <FastSerial.h>
 
 // If you're using a GPS module:
 // Connect the GPS Power pin to 5V
@@ -30,12 +30,16 @@
 
 // If using software serial, keep these lines enabled
 // (you can change the pin numbers to match your wiring):
-SoftwareSerial mySerial(3, 2);
+//SoftwareSerial mySerial(3, 2);
 
-Adafruit_GPS GPS(&mySerial);
+FastSerialPort0(Serial);
+FastSerialPort1(Serial1);
+
+
+//Adafruit_GPS GPS(&mySerial);
 // If using hardware serial (e.g. Arduino Mega), comment
 // out the above six lines and enable this line instead:
-//Adafruit_GPS GPS(&Serial1);
+Adafruit_GPS GPS(&Serial1);
 
 
 // Set GPSECHO to 'false' to turn off echoing the GPS data to the Serial console
@@ -80,7 +84,7 @@ void setup()
 
   delay(1000);
   // Ask for firmware version
-  mySerial.println(PMTK_Q_RELEASE);
+  Serail1.println(PMTK_Q_RELEASE);
 }
 
 

@@ -41,10 +41,13 @@ RC_HAL* RC_HAL::getInstance()
 
 void RC_HAL::init()  {
 	
+	pinMode(PIN1, INPUT); 
+	pinMode(P2IN, INPUT); 
+	pinMode(P3IN, INPUT); 
+
 	PCintPort::attachInterrupt(P1IN,  calcCh1 , CHANGE);
 	PCintPort::attachInterrupt(P2IN,  calcCh2 , CHANGE);
 	PCintPort::attachInterrupt(P3IN,  calcCh3 , CHANGE);
-	
 	
 }
 
@@ -70,6 +73,17 @@ uint16_t RC_HAL::chin(uint8_t ch)  {
 	
 }
 
+/*void RC_HAL::read_all() {
+
+
+
+	_ch3pwmIn=pulseIn(P3IN,HIGH);
+	_ch1pwmIn=pulseIn(P1IN,HIGH);
+	_ch2pwmIn=pulseIn(P2IN,HIGH);
+
+		
+}
+*/
 void RC_HAL::read_all() {
 
 
@@ -81,7 +95,7 @@ void RC_HAL::read_all() {
 
 	if(bUpdateFlagsShared)
 	{
-		//noInterrupts(); // turn interrupts off quickly while we take local copies of the shared variables
+		noInterrupts(); // turn interrupts off quickly while we take local copies of the shared variables
 
 		// take a local copy of which channels were updated in case we need to use this in the rest of loop
 		bUpdateFlags = bUpdateFlagsShared;
@@ -102,7 +116,7 @@ void RC_HAL::read_all() {
 			unCh3In = unCh3InShared;
 		}
 		
-		//interrupts();
+		interrupts();
 		
 		//Assegna il valore al servo
 		if(bUpdateFlags & CH1_FLAG)
@@ -131,7 +145,6 @@ void RC_HAL::read_all() {
 	}
 	
 }
-
 
 void calcCh1(void)
 {

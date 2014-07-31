@@ -6,10 +6,37 @@
 #define 	UINT16_MAX   (__CONCAT(INT16_MAX, U) * 2U + 1U)
 
 
+void gcs_send_position(void){
+
+ /* Serial.print (gps.lon);
+  Serial.print (";");
+  Serial.print (gps.lat);
+  Serial.print("\n\r");
+  */
+ 
+	// Initialize the required buffers 
+	mavlink_message_t msg; 
+	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+	uint32_t timestamp = millis();
+	
+ //avlink_msg_global_position_int_pack( system_id,  component_id, * msg,
+//						        time_boot_ms,  lat,  lon,  alt,  relative_alt,  vx,  vy,  vz,  hdg)
+	//mavlink_msg_gps_raw_int_pack( 100,200, &msg,timestamp,1, gps.lat,gps.lon,gps.alt,  UINT16_MAX,  UINT16_MAX,  0,  gps.angle, 12);
+
+	mavlink_msg_global_position_int_pack(100,200, &msg,timestamp, gps.lat,gps.lon,gps.alt,0,0,0,0, gps.angle);
+	
+	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+	
+	// Send the message (.write sends as bytes) 
+	Serial.write(buf, len);
+
+
+
+}
+
 void gcs_send_heartbeat(void){
 	
-
-	int system_type = MAV_TYPE_GENERIC;
+  int system_type = MAV_TYPE_GENERIC;
 	int autopilot_type = MAV_AUTOPILOT_GENERIC;
 	uint8_t base_mode;
 	uint32_t  custom_mode;
@@ -76,6 +103,7 @@ void gcs_send_servo_out(){
 	Serial.write(buf, len);
 	
 }
+  
 
 void gcs_send_servo_in(){
 

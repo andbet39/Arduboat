@@ -9,10 +9,9 @@ void read_radio(){
 		int pwm =  rudderChannel.readRadio();
 		int pwm2 = sailChannel.readRadio();
 		int pwm3 = auxChannel.readRadio();
-		//Serial.print(pwm);Serial.print(" : ");Serial.print(pwm3);
-		//Serial.print("\n\r");
+		
+//Serial.print(pwm);Serial.print(":");Serial.print(pwm2);Serial.print(":");Serial.print(pwm3);Serial.print("\n\r");
 
-	
 	if(current_nav_mode==NAV_MODE_HEADHOLD){
 		
 			sailChannel.setPwm(pwm2);
