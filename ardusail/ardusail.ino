@@ -39,6 +39,7 @@ RC_Channel rudderChannel;
 RC_Channel sailChannel;
 RC_Channel auxChannel;
 
+
 FastSerialPort0(Serial);
 FastSerialPort1(Serial1);
 
@@ -66,6 +67,9 @@ static AS_Scheduler scheduler;
 static AS_Sensor sensor;
 static AS_GPS gps;
 
+static AS_Mission mission;
+
+
 static CGS_MAVLink   gcs;
 
 
@@ -88,7 +92,7 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
 
 
 void setup() {
-    
+      
       RC_HAL *hal=RC_HAL::getInstance();
       
       hal->init();

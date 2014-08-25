@@ -6,9 +6,8 @@
 #ifndef CGS_MAVLink_h
 #define CGS_MAVLink_h
 
-#include <util/crc16.h>
-#include <FastSerial.h>
-#include <Arduino.h>
+#include "../AS_Mission/AS_Mission.h"
+#include "../FastSerial/FastSerial.h"
 
 #include "include/mavlink/v1.0/mavlink_types.h"
 #include "include/mavlink/v1.0/common/mavlink.h"
@@ -20,12 +19,15 @@ public:
 
 	void init();
 
-	void send_heartbeat();
-	
-	void send_attitude(float yaw, float pitch, float roll);
-    void send_gps_raw_int(uint8_t fix_type, int32_t lat, int32_t lon, int32_t alt, uint16_t eph, uint16_t epv, uint16_t vel, uint16_t cog, uint8_t satellites_visible);	
+	void handleMissionCountMessage(AS_Mission * mission , mavlink_message_t * msg);
+	void handleMissionClearMessage(AS_Mission * mission , mavlink_message_t * msg);
+	void sendMissionAck();
+
+
 private:
 
+	bool IsReceiving;
+	uint8_t last_received;
 	
 
 };

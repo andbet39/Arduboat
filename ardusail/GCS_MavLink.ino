@@ -1,3 +1,4 @@
+
 #define 	INT8_MAX   0x7f
 #define 	INT8_MIN   (-INT8_MAX - 1)
 #define 	UINT8_MAX   (__CONCAT(INT8_MAX, U) * 2U + 1U)
@@ -145,21 +146,25 @@ void gcs_update(){
 	   // Try to get a new message
 	   if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status)) {
 			   // Handle message
-
+                          
 			   switch (msg.msgid)
 			   {
 			   	case MAVLINK_MSG_ID_HEARTBEAT:
-
 			   	break;
 
-			   	case MAV_CMD_NAV_WAYPOINT:
-
-
+                                case MAVLINK_MSG_ID_MISSION_CLEAR_ALL:
+                                     
+                                      Serial.print("MAVLINK_MSG_ID_MISSION_CLEAR_ALL \n");
+                                      gcs.handleMissionClearMessage(&mission,&msg);
 			   	break;
-
-
+			         case MAVLINK_MSG_ID_MISSION_REQUEST_LIST:
+                                     
+                                      Serial.print("MAVLINK_MSG_ID_MISSION_REQUEST_LIST \n");
+			   	break;
+			
 			   	default:
-
+                                      Serial.print(msg.msgid);
+                                      Serial.print("MV\n");
 			   	break;
 			   }
 		}   // And get the next one
