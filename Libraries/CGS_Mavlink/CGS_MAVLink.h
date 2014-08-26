@@ -21,14 +21,17 @@ public:
 
 	void handleMissionCountMessage(AS_Mission * mission , mavlink_message_t * msg);
 	void handleMissionClearMessage(AS_Mission * mission , mavlink_message_t * msg);
-	void sendMissionAck();
+	void handleMissionItemMessage(AS_Mission * mission , mavlink_message_t * msg);
+	void requestWP(uint16_t wpnum);
+	void sendMissionAck(uint8_t result);
 
 
 private:
 
-	bool IsReceiving;
-	uint8_t last_received;
+	bool isReceiving;
+	uint16_t last_received;
 	
+	uint16_t receive_count;
 
 };
 

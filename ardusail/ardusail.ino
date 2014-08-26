@@ -19,6 +19,7 @@
 #include <AS_Scheduler.h>
 #include <AS_Sensor.h>
 #include <AS_GPS.h>
+#include <AS_Mission.h>
 #include <AS_Common.h>
 #include <CGS_MAVLink.h>
 #include <RC_Channel.h>
@@ -79,12 +80,12 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
 	{ write_radio,				1,100},
 	{ update_heading,            2,   100 },
 	{ check_nav_mode,             10,   100 },
-      {gps_update,                10,100},
-    { gcs_send_attitude,        5,   200 },
+      //{gps_update,                10,100},
+    //{ gcs_send_attitude,        5,   200 },
       { gcs_send_heartbeat,		50,	  100},
 //      { gcs_send_servo_out, 5,         200},
 //      { gcs_send_servo_in, 5,         200},		
-      { gcs_send_position, 20,         200}	
+//      { gcs_send_position, 20,         200}	
 	//{gcs_update,1,200}
 	
 
@@ -107,6 +108,7 @@ void setup() {
     sailChannel.init(7,2);
     auxChannel.init(8,3);
     
+    mission.init();
     
     init_navigation();
     
@@ -128,7 +130,7 @@ void setup() {
 
 void loop() {
 	
-  //gcs_update();
+  gcs_update();
 
   if(!sensor.getSample()){
     return;

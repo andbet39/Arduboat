@@ -9,13 +9,7 @@
 
 void gcs_send_position(void){
 
- /* Serial.print (gps.lon);
-  Serial.print (";");
-  Serial.print (gps.lat);
-  Serial.print("\n\r");
-  */
- 
-	// Initialize the required buffers 
+ 	// Initialize the required buffers 
 	mavlink_message_t msg; 
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 	uint32_t timestamp = millis();
@@ -143,24 +137,38 @@ void gcs_update(){
 	{
 	 
             uint8_t c = Serial.read();
+
 	   // Try to get a new message
 	   if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status)) {
 			   // Handle message
-                          
 			   switch (msg.msgid)
 			   {
 			   	case MAVLINK_MSG_ID_HEARTBEAT:
+                                    // Serial.print("MAVLINK_MSG_ID_HEARTBEAT \n");
+
 			   	break;
 
                                 case MAVLINK_MSG_ID_MISSION_CLEAR_ALL:
                                      
                                       Serial.print("MAVLINK_MSG_ID_MISSION_CLEAR_ALL \n");
-                                      gcs.handleMissionClearMessage(&mission,&msg);
+                                     gcs.handleMissionClearMessage(&mission,&msg);
 			   	break;
 			         case MAVLINK_MSG_ID_MISSION_REQUEST_LIST:
                                      
                                       Serial.print("MAVLINK_MSG_ID_MISSION_REQUEST_LIST \n");
 			   	break;
+                                case MAVLINK_MSG_ID_MISSION_COUNT:
+                                      Serial.print("MAVLINK_MSG_ID_MISSION_COUNT \n");
+			   	      gcs.handleMissionCountMessage(&mission,&msg);
+                                
+                                
+                                break;
+                                case MAVLINK_MSG_ID_MISSION_ITEM:
+                                      Serial.print("MAVLINK_MSG_ID_MISSION_ITEM \n");
+                                      gcs.handleMissionItemMessage(&mission,&msg);
+
+                                
+                                break;
 			
 			   	default:
                                       Serial.print(msg.msgid);
