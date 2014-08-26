@@ -114,7 +114,7 @@ void setup() {
     
     
     Serial.print( "Start init sensor");
-    sensor.init(UPDATE_SENSOR_TIME);
+    sensor.init(UPDATE_SENSOR_TIME);  
     
     
     Serial.print( "Start init scheduler");

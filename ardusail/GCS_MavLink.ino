@@ -156,6 +156,12 @@ void gcs_update(){
 			         case MAVLINK_MSG_ID_MISSION_REQUEST_LIST:
                                      
                                       Serial.print("MAVLINK_MSG_ID_MISSION_REQUEST_LIST \n");
+                                       gcs.handleMissionRequestList(&mission,&msg);
+			   	break;
+                                case MAVLINK_MSG_ID_MISSION_REQUEST:
+                                     
+                                      Serial.print("MAVLINK_MSG_ID_MISSION_REQUEST\n");
+                                       gcs.handleMissionRequest(&mission,&msg);
 			   	break;
                                 case MAVLINK_MSG_ID_MISSION_COUNT:
                                       Serial.print("MAVLINK_MSG_ID_MISSION_COUNT \n");

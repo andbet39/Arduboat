@@ -22,9 +22,9 @@
 
 
 struct __attribute__((__packed__)) cmd_nav_to_wp {
-		uint8_t cmd_id;
-		uint32_t latitude;
-		uint32_t longitude;
+		uint16_t cmd_id;
+		int32_t latitude;
+		int32_t longitude;
 	};
 
 class AS_Mission {
@@ -41,8 +41,12 @@ public:
 	void stop();
 	void init();
 	void clear();
-
+	void loadCommandFromEEprom(cmd_nav_to_wp * cmd,uint16_t cmd_num);
 	void mavLinkCmdToMission(mavlink_mission_item_t * orig,cmd_nav_to_wp * dest);
+	void missionToMavLink(mavlink_mission_item_t * dest,cmd_nav_to_wp * orig);
+
+
+	uint16_t loadedCommand();
 
 
 	void DebugPrint();

@@ -29,6 +29,9 @@ void CGS_MAVLink::handleMissionCountMessage(AS_Mission * mission , mavlink_messa
     receive_count = count.count; //Totale da ricevere
     last_received = 0; //Contatore dei ricevuti
     isReceiving=true;
+    
+    mission->clear();
+
     Serial.print("\n Waypoint count :");
     Serial.print(receive_count);
     requestWP(last_received);
@@ -105,6 +108,75 @@ void CGS_MAVLink::handleMissionClearMessage(AS_Mission * mission , mavlink_messa
     sendMissionAck(0);
 }
 
+
+void CGS_MAVLink::handleMissionRequestList(AS_Mission * mission , mavlink_message_t * msg){
+    
+    mavlink_mission_request_list_t packet;
+    mavlink_msg_mission_request_list_decode(msg, &packet);
+
+    // exit immediately if this command is not meant for this vehicle
+    if (mavlink_check_target(packet.target_system, packet.target_component)) {
+        return;
+    }
+
+    isSending=true;
+    last_sended=0;
+    
+    sendMissionCount(mission);
+
+}
+
+
+void CGS_MAVLink::handleMissionRequest(AS_Mission * mission , mavlink_message_t * msg){
+        
+
+        uint8_t result = MAV_MISSION_ACCEPTED;
+
+    mavlink_mission_request_t item;
+    mavlink_msg_mission_request_decode(msg, &item);
+
+    // exit immediately if this command is not meant for this vehicle
+    if (mavlink_check_target(item.target_system, item.target_component)) {
+        return;
+    }
+
+    if (isSending)
+    {
+            sendMissionItem(mission,item.seq);
+            last_sended++;
+
+
+    }
+
+mission_ack:
+    sendMissionAck(result);
+
+
+}
+
+void CGS_MAVLink::sendMissionItem(AS_Mission * mission,uint16_t cmd_num)
+{
+
+    mavlink_message_t msg;
+    uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+
+    cmd_nav_to_wp cmd1;
+
+    mission->loadCommandFromEEprom(&cmd1,cmd_num);
+
+    mavlink_msg_mission_item_pack(100,200,&msg,255,0,cmd1.cmd_id, MAV_FRAME_GLOBAL, MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, cmd1.latitude/ 1.0e7f, cmd1.longitude/ 1.0e7f, 0);
+    
+    Serial.printf("Sending WP %d \n",cmd1.cmd_id);
+
+    uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+    
+    Serial.write(buf, len);
+  
+
+}
+
+
+
 void CGS_MAVLink::sendMissionAck(uint8_t result){
 
 
@@ -118,6 +190,24 @@ void CGS_MAVLink::sendMissionAck(uint8_t result){
 	Serial.write(buf, len);
   
 }
+
+void CGS_MAVLink::sendMissionCount(AS_Mission * mission){
+
+
+    mavlink_message_t msg;
+    uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+/*static inline uint16_t mavlink_msg_mission_count_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               uint8_t target_system, uint8_t target_component, uint16_t count)*/
+    mavlink_msg_mission_count_pack(100,200,&msg,255,0, mission->loadedCommand());
+    
+    uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+    
+    Serial.write(buf, len);
+  
+}
+
+
+
 
 void CGS_MAVLink::requestWP(uint16_t wpnum){
 

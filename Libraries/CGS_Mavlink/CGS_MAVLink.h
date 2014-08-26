@@ -22,15 +22,21 @@ public:
 	void handleMissionCountMessage(AS_Mission * mission , mavlink_message_t * msg);
 	void handleMissionClearMessage(AS_Mission * mission , mavlink_message_t * msg);
 	void handleMissionItemMessage(AS_Mission * mission , mavlink_message_t * msg);
+	void handleMissionRequestList(AS_Mission * mission , mavlink_message_t * msg);
+	void handleMissionRequest(AS_Mission * mission , mavlink_message_t * msg);
 	void requestWP(uint16_t wpnum);
 	void sendMissionAck(uint8_t result);
+	void sendMissionCount(AS_Mission * mission);
+	void sendMissionItem(AS_Mission * mission,uint16_t cmd_num);
 
 
 private:
 
 	bool isReceiving;
+	bool isSending;
 	uint16_t last_received;
 	uint16_t receive_count;
+	uint16_t last_sended;
 
 };
 
