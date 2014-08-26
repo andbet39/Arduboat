@@ -30,7 +30,6 @@ private:
 
 	bool isReceiving;
 	uint16_t last_received;
-	
 	uint16_t receive_count;
 
 };

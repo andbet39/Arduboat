@@ -5,13 +5,13 @@ void check_nav_mode(){
 	if(auxChannel.pwmIn>1500 && current_nav_mode!=NAV_MODE_MANUAL)
 	{
 		switch_mode(NAV_MODE_MANUAL);
-		Serial.print("Switched to MANUAL");
+		Serial.print("Switched to MANUAL\n");
 	}
 	
 	if (auxChannel.pwmIn<1500 && current_nav_mode!=NAV_MODE_HEADHOLD)
 	{
 		switch_mode(NAV_MODE_HEADHOLD);
-			Serial.print("Switched to AUTO");
+			Serial.print("Switched to AUTO\n");
 	}
 	
 }

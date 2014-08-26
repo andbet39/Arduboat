@@ -63,11 +63,9 @@ void CGS_MAVLink::handleMissionItemMessage(AS_Mission * mission , mavlink_messag
             Serial.printf("Received WP : %d \n",item.seq);
             last_received++;
 
-            cmd_nav_to_wp cmd1;
-            cmd1.cmd_id=item.seq;
-            cmd1.latitude=item.x;
-            cmd1.longitude=item.y;
-
+                cmd_nav_to_wp cmd1;
+            
+            mission->mavLinkCmdToMission(&item,&cmd1);
             mission->addCmd(&cmd1);
             
             if (last_received >= receive_count)
@@ -103,6 +101,7 @@ void CGS_MAVLink::handleMissionClearMessage(AS_Mission * mission , mavlink_messa
         return;
     }
 
+    mission->clear();
     sendMissionAck(0);
 }
 

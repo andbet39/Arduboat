@@ -20,7 +20,7 @@ void RC_Channel::init(uint8_t pinOut, uint8_t chIn)
 	_min=SERVO_MIN;
 	_max=SERVO_MAX;
 	_override=0;
-	Serial.print("Servo attahced");	
+	Serial.printf("Servo attahced Channel: %d \n",chIn );
 	
 }
 

@@ -109,7 +109,7 @@ void setup() {
     auxChannel.init(8,3);
     
     mission.init();
-    
+    mission.DebugPrint();
     init_navigation();
     
     
