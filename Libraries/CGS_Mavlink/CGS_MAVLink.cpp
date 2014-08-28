@@ -154,6 +154,24 @@ mission_ack:
 
 }
 
+void CGS_MAVLink::handleHilStateMessage(AS_HILGPS * gps ,AS_HILSensor * sensor, mavlink_message_t * msg){
+
+    mavlink_hil_state_t packet;
+    mavlink_msg_hil_state_decode(msg, &packet);
+
+/*
+    // exit immediately if this command is not meant for this vehicle
+    if (mavlink_check_target(packet.target_system, packet.target_component)) {
+        return;
+    }
+*/
+    gps->setHIL(packet.lat,packet.lon,packet.alt);
+    sensor->setHIL(packet.yaw,packet.pitch,packet.roll);
+
+}
+
+
+
 void CGS_MAVLink::sendMissionItem(AS_Mission * mission,uint16_t cmd_num)
 {
 

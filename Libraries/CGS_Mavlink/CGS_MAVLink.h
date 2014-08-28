@@ -7,6 +7,7 @@
 #define CGS_MAVLink_h
 
 #include "../AS_Mission/AS_Mission.h"
+#include "../AS_HILGPS/AS_HILGPS.h"
 #include "../FastSerial/FastSerial.h"
 
 #include "include/mavlink/v1.0/mavlink_types.h"
@@ -24,6 +25,8 @@ public:
 	void handleMissionItemMessage(AS_Mission * mission , mavlink_message_t * msg);
 	void handleMissionRequestList(AS_Mission * mission , mavlink_message_t * msg);
 	void handleMissionRequest(AS_Mission * mission , mavlink_message_t * msg);
+
+	void handleHilStateMessage(AS_HILGPS * gps , mavlink_message_t * msg);
 	void requestWP(uint16_t wpnum);
 	void sendMissionAck(uint8_t result);
 	void sendMissionCount(AS_Mission * mission);

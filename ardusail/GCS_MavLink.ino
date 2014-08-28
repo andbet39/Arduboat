@@ -175,6 +175,12 @@ void gcs_update(){
 
                                 
                                 break;
+                                case MAVLINK_MSG_ID_HIL_STATE:
+                                      Serial.print("MAVLINK_MSG_ID_HIL_STATE \n");
+                                      gcs.handleHilStateMessage(&gps ,&msg);
+
+                                
+                                break;
 			
 			   	default:
                                       Serial.print(msg.msgid);
