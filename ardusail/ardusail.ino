@@ -27,11 +27,16 @@
 #include <RC_Channel.h>
 #include <RC_HAL.h>
 #include <PID_v1.h>
+#include <AS_Nav.h>
+
 
 #define UPDATE_SENSOR_TIME 20
 
 #define NAV_MODE_MANUAL 0
 #define NAV_MODE_HEADHOLD 1
+#define NAV_MODE_AUTO 2
+
+#define WP_RADIUS 2
 
 
 int32_t last_millis;
@@ -41,6 +46,8 @@ int32_t elapsed;
 RC_Channel rudderChannel;
 RC_Channel sailChannel;
 RC_Channel auxChannel;
+
+AS_Nav navigator;
 
 
 FastSerialPort0(Serial);
@@ -54,6 +61,8 @@ PID headingPID(&Input, &Output, &Setpoint,consKp,consKi,consKd, REVERSE);
 
 
 static int16_t nav_bearing;
+static int32_t nav_distance;
+
 static int16_t nav_bearing_error;
 
 static int16_t curr_heading;
@@ -89,10 +98,10 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
         {gps_update,                10,100},
         { gcs_send_attitude,        5,   200 },
       { gcs_send_heartbeat,		50,	  100},
-      { gcs_send_servo_out, 5,         200},
+      //{ gcs_send_servo_out, 5,         200},
 //      { gcs_send_servo_in, 5,         200},		
       { gcs_send_position, 5,         200},
-      {gcs_send_hil_control,5,200},
+      {gcs_send_hil_control,10,200},
       {gcs_send_navcontroller,20,200}
 	
 	//{gcs_update,1,200}
@@ -117,10 +126,14 @@ void setup() {
     sailChannel.init(7,2);
     auxChannel.init(8,3);
     
-    mission.init();
-    mission.DebugPrint();
+     mission.init();
+     mission.DebugPrint();
+   
+     navigator.init(&gps,&mission);
+   
     init_navigation();
     
+   
     
     Serial.print( "Start init sensor");
     sensor.init(UPDATE_SENSOR_TIME);  
@@ -168,7 +181,7 @@ static void one_sec_loop(){
 
 static void fast_loop()
 {
-	if(current_nav_mode==NAV_MODE_HEADHOLD){	
+	if(current_nav_mode>0){	
 		update_nav();
 	}
 }

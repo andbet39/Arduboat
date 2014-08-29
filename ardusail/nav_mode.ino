@@ -23,7 +23,7 @@ void switch_mode(int navmode){
 		case NAV_MODE_MANUAL:
 		
 		      current_nav_mode=NAV_MODE_MANUAL;
-		      Serial.print("Switched to AUTO\n");
+		      Serial.print("Switched to MANUAL\n");
 
 		break;
 		
@@ -36,6 +36,14 @@ void switch_mode(int navmode){
 			 
 			Setpoint=nav_bearing;
 		break;
+
+                case NAV_MODE_AUTO:
+                        Serial.print("\n Switched to MISSION");
+                        current_nav_mode=NAV_MODE_AUTO;
+                        mission.start();
+                        
+                        
+                break;
 	}	
 	
 }

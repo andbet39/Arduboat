@@ -45,8 +45,15 @@ public:
 	void mavLinkCmdToMission(mavlink_mission_item_t * orig,cmd_nav_to_wp * dest);
 	void missionToMavLink(mavlink_mission_item_t * dest,cmd_nav_to_wp * orig);
 
+	bool started;
 
-	uint16_t loadedCommand();
+
+	
+	void reachedCurrent();
+	uint16_t loadedCommand(); //numero di comandi presenti
+	uint8_t currentId(); //id del comando corrente
+
+	cmd_nav_to_wp actual_nav_command;
 
 
 	void DebugPrint();

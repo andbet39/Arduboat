@@ -8,7 +8,25 @@ void init_navigation(){
 
  void update_nav(){
 	
-	if(current_nav_mode==NAV_MODE_HEADHOLD){
+
+
+        if(current_nav_mode==NAV_MODE_AUTO){
+            navigator.update();
+            nav_bearing = navigator.nav_bearing/100;
+            nav_distance= navigator.nav_distance;
+            
+            
+            if(nav_distance<WP_RADIUS){
+              
+              gcs_send_mission_reached();
+                mission.reachedCurrent();
+              gcs_send_mission_current();
+              
+            }
+        
+        }
+		
+        if(current_nav_mode>0){
 		
 		int errorHeading = nav_bearing-curr_heading;
 		
@@ -35,7 +53,6 @@ void init_navigation(){
 		//Serial.print(" OUT: ");Serial.print(Output);Serial.print(" ERR: ");Serial.print(Input-Setpoint);Serial.print(" CUR_HD: ");Serial.print(Input);Serial.print(" TO_HD: ");Serial.print(Setpoint);Serial.print("\n\r");
 		rudderChannel.setPwm(center-Output);
 	}
-	
 	
 }
 

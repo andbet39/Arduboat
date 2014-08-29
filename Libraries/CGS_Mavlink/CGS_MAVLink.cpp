@@ -190,7 +190,12 @@ void CGS_MAVLink::sendMissionItem(AS_Mission * mission,uint16_t cmd_num)
 
     mission->loadCommandFromEEprom(&cmd1,cmd_num);
 
-    mavlink_msg_mission_item_pack(100,200,&msg,255,0,cmd1.cmd_id, MAV_FRAME_GLOBAL, MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, cmd1.latitude/ 1.0e7f, cmd1.longitude/ 1.0e7f, 0);
+    uint8_t current=0;
+    if(mission->currentId()==cmd1.cmd_id){
+        current=1;
+    }
+
+    mavlink_msg_mission_item_pack(100,200,&msg,255,0,cmd1.cmd_id, MAV_FRAME_GLOBAL, MAV_CMD_NAV_WAYPOINT, current, 0, 0, 0, 0, 0, cmd1.latitude/ 1.0e7f, cmd1.longitude/ 1.0e7f, 0);
     
     Serial.printf("Sending WP %d \n",cmd1.cmd_id);
 

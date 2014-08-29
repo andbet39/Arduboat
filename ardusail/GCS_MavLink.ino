@@ -36,6 +36,13 @@ void gcs_send_heartbeat(void){
 	        base_mode = MAV_MODE_MANUAL_ARMED;
 		custom_mode = MAV_MODE_MANUAL_ARMED;
 	}
+
+        if(current_nav_mode==NAV_MODE_AUTO){
+        
+                base_mode = MAV_MODE_AUTO_ARMED;
+		custom_mode = MAV_MODE_AUTO_ARMED;
+        
+        }
 		uint8_t system_status = MAV_STATE_ACTIVE;
 
 
@@ -87,8 +94,8 @@ void gcs_send_navcontroller(){
 	uint32_t timestamp = millis();
 	
 	
-	mavlink_msg_nav_controller_output_pack(100,200, &msg,  nav_bearing,  nav_bearing, 0 , nav_bearing, 0, 0,0,0);
-	
+	mavlink_msg_nav_controller_output_pack(100,200, &msg,  0,  0, curr_heading , nav_bearing, nav_distance, 0,0,0);
+	                           
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
 	// Send the message (.write sends as bytes) 
@@ -137,7 +144,35 @@ void gcs_send_servo_in(){
 	Serial.write(buf, len);
 
 }
+void gcs_send_mission_current(){
 
+	// Initialize the required buffers
+	mavlink_message_t msg;
+	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+	
+        mavlink_msg_mission_current_pack(100,200, &msg,mission.currentId());
+						       
+	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+	
+	// Send the message (.write sends as bytes)
+	Serial.write(buf, len);
+
+}
+
+void gcs_send_mission_reached(){
+
+	// Initialize the required buffers
+	mavlink_message_t msg;
+	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+	
+	mavlink_msg_mission_item_reached_pack(100,200, &msg,mission.currentId());
+				       
+	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+	
+	// Send the message (.write sends as bytes)
+	Serial.write(buf, len);
+
+}
 
 void gcs_send_hil_control(){
 
@@ -148,9 +183,6 @@ void gcs_send_hil_control(){
 	float rudder= rudderChannel.getControl();
 	float sail= sailChannel.getControl();
 	float aux= auxChannel.getControl();
-	/* mavlink_msg_hil_controls_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint64_t time_usec, float roll_ailerons, float pitch_elevator, float yaw_rudder, float throttle, float aux1, float aux2, float aux3, float aux4, uint8_t mode, uint8_t nav_mode)
-*/
 	mavlink_msg_hil_controls_pack(100, 200, &msg,millis(), 0, 0, rudder, sail, aux, 0,0, 0, 0, 0);
 
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
@@ -188,6 +220,7 @@ void gcs_update(){
                                         Serial.printf("Switch to %d",gcs_mode);
                                        if(gcs_mode==MAV_MODE_GUIDED_ARMED)switch_mode(NAV_MODE_HEADHOLD);
                                        if(gcs_mode==MAV_MODE_MANUAL_ARMED)switch_mode(NAV_MODE_MANUAL);
+                                       if(gcs_mode==156)switch_mode(NAV_MODE_AUTO);
                                        
 			        break;
 

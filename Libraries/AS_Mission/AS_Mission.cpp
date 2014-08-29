@@ -13,6 +13,7 @@ void AS_Mission::init(){
 	last_inserted_cmd=0;
  	memory_count = eeprom_read_word(( uint16_t *)COUNT_ADDRESS);	
  	int i=0;
+ 	started=false;
 
 
 
@@ -50,7 +51,17 @@ uint16_t AS_Mission::loadedCommand(){
 
 void AS_Mission::start(){
 
-	current_cmd=0;
+	current_cmd=0;	
+	started=true;
+
+	nextCmd(&actual_nav_command);
+
+}
+
+uint8_t AS_Mission::currentId(){
+
+	return actual_nav_command.cmd_id;
+
 }
 
 void AS_Mission::clear(){
@@ -60,6 +71,12 @@ void AS_Mission::clear(){
 	 
 	eeprom_write_word(( uint16_t *)COUNT_ADDRESS ,0);		
 	memory_count=0;
+}
+
+void AS_Mission::reachedCurrent(){
+
+		nextCmd(&actual_nav_command);
+
 }
 
 void AS_Mission::nextCmd(cmd_nav_to_wp * cmd){
