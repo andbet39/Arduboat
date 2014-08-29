@@ -2,16 +2,14 @@
 
 void check_nav_mode(){
 	
-	if(auxChannel.pwmIn>1500 && current_nav_mode!=NAV_MODE_MANUAL)
+	if(auxChannel.pwmIn>1500 && current_nav_mode!=NAV_MODE_MANUAL &! overridedMode)
 	{
 		switch_mode(NAV_MODE_MANUAL);
-		Serial.print("Switched to MANUAL\n");
 	}
 	
-	if (auxChannel.pwmIn<1500 && current_nav_mode!=NAV_MODE_HEADHOLD)
+	if (auxChannel.pwmIn<1500 && current_nav_mode!=NAV_MODE_HEADHOLD &! overridedMode)
 	{
 		switch_mode(NAV_MODE_HEADHOLD);
-			Serial.print("Switched to AUTO\n");
 	}
 	
 }
@@ -24,8 +22,9 @@ void switch_mode(int navmode){
 		
 		case NAV_MODE_MANUAL:
 		
-		current_nav_mode=NAV_MODE_MANUAL;
-		
+		      current_nav_mode=NAV_MODE_MANUAL;
+		      Serial.print("Switched to AUTO\n");
+
 		break;
 		
 		
@@ -36,7 +35,7 @@ void switch_mode(int navmode){
 			rudderChannel.fixCenterPos();
 			 
 			Setpoint=nav_bearing;
-			break;
+		break;
 	}	
 	
 }

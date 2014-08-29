@@ -32,6 +32,8 @@ class RC_Channel {
 	void setCenter(uint16_t center);
 	void fixCenterPos();
 	uint16_t _pwmOut;
+
+	float getControl();
 private:
 
 	uint16_t timer;

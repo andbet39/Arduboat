@@ -38,6 +38,14 @@ void CGS_MAVLink::handleMissionCountMessage(AS_Mission * mission , mavlink_messa
 
 }
 
+uint8_t CGS_MAVLink::handleSetModeMessage(mavlink_message_t  * msg){
+
+    mavlink_set_mode_t mode;
+    mavlink_msg_set_mode_decode(msg, &mode);
+
+    return mode.base_mode;
+
+}
 
 void CGS_MAVLink::handleMissionItemMessage(AS_Mission * mission , mavlink_message_t * msg){
 

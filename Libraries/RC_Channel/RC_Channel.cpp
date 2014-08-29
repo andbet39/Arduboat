@@ -20,6 +20,8 @@ void RC_Channel::init(uint8_t pinOut, uint8_t chIn)
 	_min=SERVO_MIN;
 	_max=SERVO_MAX;
 	_override=0;
+	_pwmOut=_min+((_max-_min)/2);
+
 	Serial.printf("Servo attahced Channel: %d \n",chIn );
 	
 }
@@ -27,20 +29,22 @@ void RC_Channel::init(uint8_t pinOut, uint8_t chIn)
 void RC_Channel::setPwm(uint16_t pwm){
 	
 	
-	if (pwm>_max)
+	if (pwm>_max && pwm <2000)
 	{
 		_max=pwm;
 	}
-	if (pwm<_min)
+	if (pwm<_min && pwm >1000)
 	{
 		_min=pwm;
 	}
 	
-	if (pwm!=_lastPwm)
-	{		
+//	if (pwm!=_lastPwm)
+//{
+	if(pwm<2000){		
 		_lastPwm=pwm;
 		_pwmOut=pwm;
 	}
+//	}
 	
 	//Serial.print(pwm);
 	//Serial.print("\n\r");
@@ -57,9 +61,9 @@ void RC_Channel::writeCurrent(){
 uint16_t RC_Channel::center(){
 	
 	int16_t center = _min+((_max-_min)/2);
-	
-	return _center;
-	
+	_center=center;
+	return center;
+
 }
 uint16_t RC_Channel::getMin(){
 	
@@ -99,6 +103,16 @@ uint16_t RC_Channel::readRadio(){
 
 void RC_Channel::setMinMax(uint16_t min,uint16_t max){
 	
+}
+
+float RC_Channel::getControl(){
+
+	uint16_t range=_max-_min;
+	float ratio = 2.0/range; 
+
+	return -1+(_pwmOut-_min)*ratio;
+
+
 }
 
 void RC_Channel::setOverrideToPwm(int16_t override){

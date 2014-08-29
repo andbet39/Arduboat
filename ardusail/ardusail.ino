@@ -49,7 +49,7 @@ FastSerialPort1(Serial1);
 #define PID_HEADING_SCALER 2.0
 
 double Setpoint, Input, Output;
-double consKp=5, consKi=0.1, consKd=2.25;
+double consKp=1.5, consKi=0.2, consKd=0.5;
 PID headingPID(&Input, &Output, &Setpoint,consKp,consKi,consKd, REVERSE);
 
 
@@ -58,6 +58,8 @@ static int16_t nav_bearing_error;
 
 static int16_t curr_heading;
 static uint8_t current_nav_mode;
+
+static bool overridedMode;
 
 double headingPIDOutput;
 
@@ -87,9 +89,12 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
         {gps_update,                10,100},
         { gcs_send_attitude,        5,   200 },
       { gcs_send_heartbeat,		50,	  100},
-//      { gcs_send_servo_out, 5,         200},
+      { gcs_send_servo_out, 5,         200},
 //      { gcs_send_servo_in, 5,         200},		
-      { gcs_send_position, 4,         200}	
+      { gcs_send_position, 5,         200},
+      {gcs_send_hil_control,5,200},
+      {gcs_send_navcontroller,20,200}
+	
 	//{gcs_update,1,200}
 	
 
@@ -101,10 +106,10 @@ void setup() {
       RC_HAL *hal=RC_HAL::getInstance();
       
       hal->init();
-      
+      overridedMode=false;
       current_nav_mode=NAV_MODE_MANUAL;
       
-      headingPID.SetOutputLimits(-500,500);
+      headingPID.SetOutputLimits(-300,300);
       gcs.init();
       gps.init();
     

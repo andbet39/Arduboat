@@ -12,7 +12,7 @@ public:
     
     // initialise scheduler
 	void init(uint8_t updateMillis);
-    void setHIL(float heading,float pitch,float roll);
+    void setHIL(float _heading,float _pitch,float _roll);
 
     bool getSample();
 	

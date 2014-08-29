@@ -15,6 +15,12 @@ void AS_HILSensor::init(uint8_t updateMillis){
 	startupSensor();
 }
 
+    void AS_HILSensor::setHIL(float _heading,float _pitch,float _roll){
+
+    	heading=_heading;
+    	pitch=_pitch;
+    	roll=_roll;
+    }
 
 
 bool AS_HILSensor::getSample(){

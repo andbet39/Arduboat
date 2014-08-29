@@ -14,11 +14,18 @@ void gcs_send_position(void){
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 	uint32_t timestamp = millis();
 	
+ //avlink_msg_global_position_int_pack( system_id,  component_id, * msg,
+//						        time_boot_ms,  lat,  lon,  alt,  relative_alt,  vx,  vy,  vz,  hdg)
+	//mavlink_msg_gps_raw_int_pack( 100,200, &msg,timestamp,1, gps.lat,gps.lon,gps.alt,  UINT16_MAX,  UINT16_MAX,  0,  gps.angle, 12);
+
 	mavlink_msg_global_position_int_pack(100,200, &msg,timestamp, gps.lat,gps.lon,gps.alt,0,0,0,0, gps.angle);
 	
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
+	// Send the message (.write sends as bytes) 
 	Serial.write(buf, len);
+
+
 
 }
 
@@ -29,12 +36,12 @@ void gcs_send_heartbeat(void){
 	uint8_t base_mode;
 	uint32_t  custom_mode;
 	if(current_nav_mode==NAV_MODE_HEADHOLD){
-		base_mode = MAV_MODE_GUIDED_ARMED;
-		custom_mode = MAV_MODE_GUIDED_ARMED;
+		base_mode = MAV_MODE_FLAG_GUIDED_ENABLED;
+		custom_mode = MAV_MODE_FLAG_GUIDED_ENABLED;
 	}else{
 
-	        base_mode = MAV_MODE_MANUAL_ARMED;
-		custom_mode = MAV_MODE_MANUAL_ARMED;
+	        base_mode = MAV_MODE_FLAG_MANUAL_INPUT_ENABLED;
+		custom_mode = MAV_MODE_FLAG_MANUAL_INPUT_ENABLED;
 	}
 		uint8_t system_status = MAV_STATE_ACTIVE;
 
@@ -77,25 +84,6 @@ void gcs_send_attitude(){
 	
 }
 
-
-void gcs_send_navcontroller(){
-	
-
-	// Initialize the required buffers 
-	mavlink_message_t msg; 
-	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
-	uint32_t timestamp = millis();
-	
-	
-	mavlink_msg_nav_controller_output_pack(100,200, &msg,  nav_bearing,  nav_bearing, 0 , nav_bearing, 0, 0,0,0);
-	
-	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-	
-	// Send the message (.write sends as bytes) 
-	Serial.write(buf, len);
-	
-	
-}
 void gcs_send_servo_out(){
 	// Initialize the required buffers
 	mavlink_message_t msg;
@@ -139,28 +127,6 @@ void gcs_send_servo_in(){
 }
 
 
-void gcs_send_hil_control(){
-
-	// Initialize the required buffers
-	mavlink_message_t msg;
-	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
-	
-	float rudder= rudderChannel.getControl();
-	float sail= sailChannel.getControl();
-	float aux= auxChannel.getControl();
-	/* mavlink_msg_hil_controls_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint64_t time_usec, float roll_ailerons, float pitch_elevator, float yaw_rudder, float throttle, float aux1, float aux2, float aux3, float aux4, uint8_t mode, uint8_t nav_mode)
-*/
-	mavlink_msg_hil_controls_pack(100, 200, &msg,millis(), 0, 0, rudder, sail, aux, 0,0, 0, 0, 0);
-
-	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-	
-	// Send the message (.write sends as bytes)
-	Serial.write(buf, len);
-
-}
-
-
 void gcs_update(){
 	
 	mavlink_message_t msg;
@@ -184,10 +150,8 @@ void gcs_update(){
                                 case MAVLINK_MSG_ID_SET_MODE:
                                        Serial.print("MAVLINK_MSG_ID_SET_MODE \n");
                                         gcs_mode=gcs.handleSetModeMessage(&msg);
-                                        overridedMode=true;
-                                        Serial.printf("Switch to %d",gcs_mode);
-                                       if(gcs_mode==MAV_MODE_GUIDED_ARMED)switch_mode(NAV_MODE_HEADHOLD);
-                                       if(gcs_mode==MAV_MODE_MANUAL_ARMED)switch_mode(NAV_MODE_MANUAL);
+                                       if(gcs_mode==8)switch_mode(NAV_MODE_HEADHOLD);
+                                       if(gcs_mode==64)switch_mode(NAV_MODE_MANUAL);
                                        
 			        break;
 
@@ -219,7 +183,7 @@ void gcs_update(){
                                 
                                 break;
                                 case MAVLINK_MSG_ID_HIL_STATE:
-                                     // Serial.print("MAVLINK_MSG_ID_HIL_STATE \n");
+                                      Serial.print("MAVLINK_MSG_ID_HIL_STATE \n");
                                       gcs.handleHilStateMessage(&gps,&sensor ,&msg);
 
                                 

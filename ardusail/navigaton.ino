@@ -29,12 +29,11 @@ void init_navigation(){
 		
 		headingPID.Compute();
 		
-		//Serial.print(" OUT: ");Serial.print(Output);Serial.print(" ERR: ");Serial.print(Input-Setpoint);Serial.print(" CUR_HD: ");Serial.print(Input);Serial.print(" TO_HD: ");Serial.print(Setpoint);Serial.print("\n\r");
 		
 		int16_t center=rudderChannel.center();
 		
+		//Serial.print(" OUT: ");Serial.print(Output);Serial.print(" ERR: ");Serial.print(Input-Setpoint);Serial.print(" CUR_HD: ");Serial.print(Input);Serial.print(" TO_HD: ");Serial.print(Setpoint);Serial.print("\n\r");
 		rudderChannel.setPwm(center-Output);
-		
 	}
 	
 	
