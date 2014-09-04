@@ -230,7 +230,10 @@ void gcs_send_hil_control(){
 
 
 void gcs_update(){
-	
+
+        
+  	gcs.update();
+
 	mavlink_message_t msg;
 	mavlink_status_t status;
 
@@ -302,7 +305,18 @@ void gcs_update(){
 
                                 
                                 break;
+                                case MAVLINK_MSG_ID_PARAM_REQUEST_LIST:
+                                     Serial.print("MAVLINK_MSG_ID_PARAM_REQUEST_LIST \n");
+                                      gcs.handleParameters_request_list(&msg);
+
                                 
+                                break;
+                                
+                                 case 109:
+                                     
+                                
+                                break;
+                               
                                
 			   	default:
                                       Serial.print(msg.msgid);

@@ -3,6 +3,9 @@
 #ifndef AS_Param_h
 #define AS_Param_h
 
+
+
+#define MAX_PARAM_NAME_SIZE 16
 enum as_var_type
 {
 
@@ -18,12 +21,13 @@ public:
 
 struct Info {   
 	uint8_t type;
-    const char param_name[16];
+    const char param_name[MAX_PARAM_NAME_SIZE];
     uint8_t key; 
     void * ptr;
      const float value;
 
 };
+
 
   
 
@@ -35,10 +39,28 @@ struct Info {
     }
     
     bool save(bool force_save=false);
+    
+    static uint8_t              type_size(enum as_var_type type);
 
 	static void setup_sketch_defaults(void);
     static void set_value(enum as_var_type type, void *ptr, float value);
+    
+    float cast_to_float(enum as_var_type type)const;
+    
+    static uint8_t count(){
+        return _num_vars;
+    }
+
+     
+    static AS_Param * getByIndex(uint16_t idx,enum as_var_type *p_type);
+
 private:
+
+     struct Param_header {
+        uint32_t key : 8;
+        uint32_t type : 6;
+    };
+
      static uint8_t              _num_vars;
      static const struct Info *  _var_info;
 };

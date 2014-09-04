@@ -13,6 +13,8 @@ void CGS_MAVLink::init(){
 
     Serial.begin(57600);
     Serial3.begin(57600);
+
+    _sendingParameter=false;
     
 }
 
@@ -269,6 +271,76 @@ void CGS_MAVLink::requestWP(uint16_t wpnum){
         Serial.write(buf, len);
 #endif
 }
+
+
+
+void CGS_MAVLink::handleParameters_request_list(mavlink_message_t * msg){
+
+    if(!_sendingParameter){
+        mavlink_param_request_list_t packet;
+        mavlink_msg_param_request_list_decode(msg, &packet);
+
+        if (mavlink_check_target(packet.target_system,packet.target_component)) {
+            return;
+        }
+
+        // Start sending parameters - next call to ::update will kick the first one out
+        _last_sent_parameter = 0;
+        _params_to_send=AS_Param::count();
+        _sendingParameter=true;
+    }
+}
+
+
+    
+void CGS_MAVLink::sendParameter(uint16_t idx){
+
+      mavlink_message_t msg;
+    uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+
+    enum as_var_type p_type;
+    p_type=AS_PTYPE_FLOAT;
+
+    AS_Param * vp = AS_Param::getByIndex(idx,&p_type);
+
+    float value =  vp->cast_to_float(p_type);
+/*static inline uint16_t mavlink_msg_param_value_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               const char *param_id, float param_value, uint8_t param_type, uint16_t param_count, uint16_t param_index)
+*/
+    char buffer [16];
+    itoa (idx,buffer,10);
+    mavlink_msg_param_value_pack(100,200,&msg, buffer,value,p_type,_params_to_send,idx );
+    
+    uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+    
+#if USE_TELEMETRY   
+        Serial3.write(buf, len);
+#else
+        Serial.write(buf, len);
+#endif  
+}
+
+
+void CGS_MAVLink::update(){
+
+if( _sendingParameter){
+    if(_last_sent_parameter!=_params_to_send ){
+
+        sendParameter(_last_sent_parameter);
+        Serial.printf("Send param idx: %d \n",_last_sent_parameter );
+
+        _last_sent_parameter++;
+    }
+
+    if(_last_sent_parameter >= _params_to_send ){
+        _sendingParameter=false;
+        Serial.printf("Done sending parameter \n");
+    }
+}
+}
+
+
+
 
 
 

@@ -8,6 +8,7 @@
 
 #include "../AS_Mission/AS_Mission.h"
 #include "../AS_HILGPS/AS_HILGPS.h"
+#include "../AS_Param/AS_Param.h"
 #include "../AS_HILSensor/AS_HILSensor.h"
 #include "../AS_GPS/AS_GPS.h"
 #include "../AS_Sensor/AS_Sensor.h"
@@ -38,7 +39,9 @@ public:
 	void sendMissionCount(AS_Mission * mission);
 	void sendMissionItem(AS_Mission * mission,uint16_t cmd_num);
 
-
+	void handleParameters_request_list(mavlink_message_t * msg);
+	void sendParameter(uint16_t idx);
+	void update();
 private:
 
 	bool isReceiving;
@@ -47,6 +50,10 @@ private:
 	uint16_t receive_count;
 	uint16_t last_sended;
 
+
+	uint8_t _last_sent_parameter;
+	uint8_t _params_to_send;
+	bool _sendingParameter;
 };
 
 #endif
