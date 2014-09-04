@@ -1,7 +1,6 @@
 
 #include <CGS_MAVLink.h>
 
-//FastSerialPort0(Serial);
 
 bool mavlink_check_target(uint8_t sysid, uint8_t compid){
 
@@ -13,7 +12,8 @@ bool mavlink_check_target(uint8_t sysid, uint8_t compid){
 void CGS_MAVLink::init(){
 
     Serial.begin(57600);
-
+    Serial3.begin(57600);
+    
 }
 
 void CGS_MAVLink::handleMissionCountMessage(AS_Mission * mission , mavlink_message_t * msg){
@@ -178,6 +178,11 @@ void CGS_MAVLink::handleHilStateMessage(AS_HILGPS * gps ,AS_HILSensor * sensor, 
 
 }
 
+void CGS_MAVLink::handleHilStateMessage(AS_GPS * gps ,AS_Sensor * sensor, mavlink_message_t * msg){
+
+  
+}
+
 
 
 void CGS_MAVLink::sendMissionItem(AS_Mission * mission,uint16_t cmd_num)
@@ -201,8 +206,11 @@ void CGS_MAVLink::sendMissionItem(AS_Mission * mission,uint16_t cmd_num)
 
     uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
     
-    Serial.write(buf, len);
-  
+#if USE_TELEMETRY   
+        Serial3.write(buf, len);
+#else
+        Serial.write(buf, len);
+#endif  
 
 }
 
@@ -218,8 +226,11 @@ void CGS_MAVLink::sendMissionAck(uint8_t result){
 	
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
-	Serial.write(buf, len);
-  
+#if USE_TELEMETRY   
+        Serial3.write(buf, len);
+#else
+    Serial.write(buf, len);
+#endif  
 }
 
 void CGS_MAVLink::sendMissionCount(AS_Mission * mission){
@@ -233,8 +244,11 @@ void CGS_MAVLink::sendMissionCount(AS_Mission * mission){
     
     uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
     
+#if USE_TELEMETRY   
+        Serial3.write(buf, len);
+#else
     Serial.write(buf, len);
-  
+#endif  
 }
 
 
@@ -242,9 +256,6 @@ void CGS_MAVLink::sendMissionCount(AS_Mission * mission){
 
 void CGS_MAVLink::requestWP(uint16_t wpnum){
 
-/*
-static inline uint16_t mavlink_msg_mission_request_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t target_system, uint8_t target_component, uint16_t seq)*/
     mavlink_message_t msg;
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 
@@ -252,8 +263,11 @@ static inline uint16_t mavlink_msg_mission_request_pack(uint8_t system_id, uint8
     
     uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
     
-    Serial.write(buf, len);
-
+#if USE_TELEMETRY   
+        Serial3.write(buf, len);
+#else
+        Serial.write(buf, len);
+#endif
 }
 
 

@@ -9,11 +9,15 @@
 #include "../AS_Mission/AS_Mission.h"
 #include "../AS_HILGPS/AS_HILGPS.h"
 #include "../AS_HILSensor/AS_HILSensor.h"
-#include "../FastSerial/FastSerial.h"
+#include "../AS_GPS/AS_GPS.h"
+#include "../AS_Sensor/AS_Sensor.h"
 
 #include "include/mavlink/v1.0/mavlink_types.h"
 #include "include/mavlink/v1.0/common/mavlink.h"
 #include "include/mavlink/v1.0/ardupilotmega/ardupilotmega.h"
+
+#define  USE_TELEMETRY true
+
 
 class CGS_MAVLink {
   
@@ -28,6 +32,7 @@ public:
 	void handleMissionRequest(AS_Mission * mission , mavlink_message_t * msg);
 	uint8_t handleSetModeMessage(mavlink_message_t  * msg);
 	void handleHilStateMessage(AS_HILGPS * gps ,AS_HILSensor * sensor, mavlink_message_t * msg);
+	void handleHilStateMessage(AS_GPS * gps ,AS_Sensor * sensor, mavlink_message_t * msg);
 	void requestWP(uint16_t wpnum);
 	void sendMissionAck(uint8_t result);
 	void sendMissionCount(AS_Mission * mission);

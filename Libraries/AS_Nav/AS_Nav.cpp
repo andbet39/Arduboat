@@ -4,11 +4,18 @@
 
 void AS_Nav::init(AS_HILGPS * gps, AS_Mission * mission){
 
+
+	//_gps=gps;
+	//_mission=mission;
+
+}
+
+void AS_Nav::init(AS_GPS * gps, AS_Mission * mission){
+
 	_gps=gps;
 	_mission=mission;
 
 }
-
 
 void AS_Nav::update(){
 

@@ -5,6 +5,7 @@
 
 #include "../AS_Mission/AS_Mission.h"
 #include "../AS_HILGPS/AS_HILGPS.h"
+#include "../AS_GPS/AS_GPS.h"
 
 
 #include <AS_Math.h>
@@ -16,6 +17,7 @@ class AS_Nav {
 public:
 
 	void init(AS_HILGPS * gps, AS_Mission * mission);
+	void init(AS_GPS * gps, AS_Mission * mission);
 	void update();
 
 
@@ -26,7 +28,8 @@ public:
 private:
 
 	AS_Mission * _mission;
-	AS_HILGPS * _gps;
+	//AS_HILGPS * _gps;
+	AS_GPS * _gps;
 
 
 

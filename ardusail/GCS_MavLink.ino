@@ -6,6 +6,8 @@
 #define 	INT16_MIN   (-INT16_MAX - 1)
 #define 	UINT16_MAX   (__CONCAT(INT16_MAX, U) * 2U + 1U)
 
+#define  USE_TELEMETRY true
+
 
 void gcs_send_position(void){
 
@@ -18,7 +20,11 @@ void gcs_send_position(void){
 	
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
+#if USE_TELEMETRY	
+        Serial3.write(buf, len);
+#else
 	Serial.write(buf, len);
+#endif
 
 }
 
@@ -56,8 +62,11 @@ void gcs_send_heartbeat(void){
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
 	// Send the message (.write sends as bytes) 
-	Serial.write(buf, len);;
-
+#if USE_TELEMETRY	
+        Serial3.write(buf, len);
+#else
+	Serial.write(buf, len);
+#endif
 	
 }
 
@@ -78,9 +87,12 @@ void gcs_send_attitude(){
 	
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
-	// Send the message (.write sends as bytes) 
+#if USE_TELEMETRY	
+        Serial3.write(buf, len);
+#else
 	Serial.write(buf, len);
-	
+#endif
+		
 	
 }
 
@@ -98,8 +110,11 @@ void gcs_send_navcontroller(){
 	                           
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
-	// Send the message (.write sends as bytes) 
+#if USE_TELEMETRY	
+        Serial3.write(buf, len);
+#else
 	Serial.write(buf, len);
+#endif
 	
 	
 }
@@ -113,8 +128,11 @@ void gcs_send_servo_out(){
 	
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
-	// Send the message (.write sends as bytes)
+#if USE_TELEMETRY	
+        Serial3.write(buf, len);
+#else
 	Serial.write(buf, len);
+#endif
 	
 }
   
@@ -141,7 +159,12 @@ void gcs_send_servo_in(){
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
 	// Send the message (.write sends as bytes)
+	
+#if USE_TELEMETRY	
+        Serial3.write(buf, len);
+#else
 	Serial.write(buf, len);
+#endif
 
 }
 void gcs_send_mission_current(){
@@ -155,7 +178,12 @@ void gcs_send_mission_current(){
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
 	// Send the message (.write sends as bytes)
+	
+#if USE_TELEMETRY	
+        Serial3.write(buf, len);
+#else
 	Serial.write(buf, len);
+#endif
 
 }
 
@@ -169,8 +197,12 @@ void gcs_send_mission_reached(){
 				       
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
-	// Send the message (.write sends as bytes)
+	
+#if USE_TELEMETRY	
+        Serial3.write(buf, len);
+#else
 	Serial.write(buf, len);
+#endif
 
 }
 
@@ -187,8 +219,12 @@ void gcs_send_hil_control(){
 
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
-	// Send the message (.write sends as bytes)
+	
+#if USE_TELEMETRY	
+        Serial3.write(buf, len);
+#else
 	Serial.write(buf, len);
+#endif
 
 }
 
@@ -198,11 +234,20 @@ void gcs_update(){
 	mavlink_message_t msg;
 	mavlink_status_t status;
 
-
+#if USE_TELEMETRY	
+	while(Serial3.available() > 0 )
+#else
 	while(Serial.available() > 0 )
+#endif
+
 	{
-	 
+	
+#if USE_TELEMETRY	
+            uint8_t c = Serial3.read();
+#else
             uint8_t c = Serial.read();
+#endif
+	 
 
 	   // Try to get a new message
 	   if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status)) {

@@ -1,6 +1,10 @@
 #include <FastSerial.h>
 #include <Arduino.h>
 
+
+#define  USE_TELEMETRY true
+
+
 #include "GCS_Mavlink.h"
 #include "navigation.h"
 #include "nav_mode.h"
@@ -15,6 +19,9 @@
 #include <Adafruit_LSM303_U.h>
 #include <Adafruit_9DOF.h>
 #include <Adafruit_GPS.h>
+
+#include <AS_Param.h>
+
 #include <AS_Math.h>
 #include <AS_Scheduler.h>
 #include <AS_Sensor.h>
@@ -30,6 +37,9 @@
 #include <AS_Nav.h>
 
 
+#include "parameters.h"
+
+
 #define UPDATE_SENSOR_TIME 20
 
 #define NAV_MODE_MANUAL 0
@@ -43,6 +53,8 @@ int32_t last_millis;
 int32_t elapsed;
 
 
+static Parameters g;
+
 RC_Channel rudderChannel;
 RC_Channel sailChannel;
 RC_Channel auxChannel;
@@ -52,11 +64,16 @@ AS_Nav navigator;
 
 FastSerialPort0(Serial);
 FastSerialPort1(Serial1);
+FastSerialPort3(Serial3);
+
 
 #define PID_HEADING_SCALER 2.0
 
 double Setpoint, Input, Output;
-double consKp=1.5, consKi=0.2, consKd=0.5;
+
+double consKp=g.rudder_pid_p, consKi=0.2, consKd=0.5;
+
+
 PID headingPID(&Input, &Output, &Setpoint,consKp,consKi,consKd, REVERSE);
 
 
@@ -78,9 +95,9 @@ static void one_sec_loop();
 
 
 static AS_Scheduler scheduler;
-//static AS_Sensor sensor;
-static AS_HILGPS gps;
-static AS_HILSensor sensor;
+static AS_Sensor sensor;
+static AS_GPS gps;
+//static AS_HILSensor sensor;
 
 
 static AS_Mission mission;
@@ -97,18 +114,19 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
 	{ check_nav_mode,             10,   100 },
         {gps_update,                10,100},
         { gcs_send_attitude,        5,   200 },
-      { gcs_send_heartbeat,		50,	  100},
+        { gcs_send_heartbeat,		50,	  100},
       //{ gcs_send_servo_out, 5,         200},
-//      { gcs_send_servo_in, 5,         200},		
-      { gcs_send_position, 5,         200},
-      {gcs_send_hil_control,10,200},
-      {gcs_send_navcontroller,20,200}
-	
+      //{ gcs_send_servo_in, 5,         200},		
+        { gcs_send_position, 5,         200},
+        {gcs_send_hil_control,10,200},
+        {gcs_send_navcontroller,20,200}
+      	
 	//{gcs_update,1,200}
 	
 
 };
 
+AS_Param param_loader(var_info, 4);
 
 void setup() {
       
@@ -116,12 +134,17 @@ void setup() {
       
       hal->init();
       overridedMode=false;
+      
+      AS_Param::setup_sketch_defaults();
+
+      
       current_nav_mode=NAV_MODE_MANUAL;
       
       headingPID.SetOutputLimits(-300,300);
       gcs.init();
       gps.init();
-    
+      
+
     rudderChannel.init(6,1);
     sailChannel.init(7,2);
     auxChannel.init(8,3);
@@ -134,6 +157,7 @@ void setup() {
     init_navigation();
     
    
+    Serial3.print("Air comunication enabled");
     
     Serial.print( "Start init sensor");
     sensor.init(UPDATE_SENSOR_TIME);  
@@ -146,6 +170,15 @@ void setup() {
     
     last_millis=0;
     elapsed=0;
+    Serial.print("\n");
+    Serial.print(g.rudder_pid_p);
+    Serial.print("\n");
+    Serial.print(g.rudder_pid_i);
+    Serial.print("\n");
+    Serial.print(g.rudder_pid_d);
+    Serial.print("\n");
+
+
 
 }
 
