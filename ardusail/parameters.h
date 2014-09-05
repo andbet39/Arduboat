@@ -26,8 +26,10 @@ public:
         k_param_sysid_this_mav,
         k_param_rudder_pid_p,
         k_param_rudder_pid_i,
-        k_param_rudder_pid_d
+        k_param_rudder_pid_d,
         
+        k_param_rudder_dead_zone
+
     };
     
   
@@ -39,6 +41,9 @@ public:
     AS_Float rudder_pid_p;
     AS_Float rudder_pid_i;
     AS_Float rudder_pid_d;
+    
+    
+    AS_Int16 rudder_dead_zone;
  
 };
 

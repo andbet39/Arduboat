@@ -38,23 +38,32 @@ void RC_Channel::setPwm(uint16_t pwm){
 		_min=pwm;
 	}
 	
-//	if (pwm!=_lastPwm)
-//{
-	if(pwm<2000){		
-		_lastPwm=pwm;
+
+	if(pwm<2000 && pwm>1000){	
 		_pwmOut=pwm;
+		_last_pwm=pwm;
 	}
-//	}
-	
-	//Serial.print(pwm);
-	//Serial.print("\n\r");
+
+
+
+
+
 }
 
 void RC_Channel::writeCurrent(){
 	
-//	Serial.print(_pwmOut);
-	//Serial.print("\n\r");
-	servo.writeMicroseconds(_pwmOut);
+	if (abs(_pwmOut-_last_pwm) > _dead_zone)
+	{
+		//Serial.printf("Servo OUT :%d \n",_pwmOut);
+		servo.writeMicroseconds(_pwmOut);
+		_last_pwm=_pwmOut;
+	}
+	
+}
+
+void RC_Channel::setDeadZone(uint16_t dead_zone){
+	
+		_dead_zone=dead_zone;
 	
 }
 

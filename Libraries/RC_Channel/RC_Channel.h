@@ -18,6 +18,8 @@ class RC_Channel {
 	void init(uint8_t pinOut,uint8_t chIn);
 	void setPwm(uint16_t pwm);
 	void setMinMax(uint16_t min,uint16_t max);
+	void setDeadZone(uint16_t dead_zone);
+
 	void writeCurrent();
 	uint16_t pwmIn;
 	void setOverrideToPwm(int16_t override);
@@ -39,11 +41,11 @@ private:
 	uint16_t timer;
 	int angle;
 	int dir;
-	uint16_t _lastPwm;
+	uint16_t _last_pwm;
 	uint8_t _chIn;
 	uint8_t _pinOut;
 	uint16_t _pwmIn;
-
+	uint16_t _dead_zone;
 	uint16_t _override;
 	uint16_t _center;
 	uint16_t	_min;

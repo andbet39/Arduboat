@@ -14,6 +14,7 @@ const AS_Param::Info var_info[]  = {
     GSCALAR(rudder_pid_p,         "RUDDER_PID_P", 0.3),
     GSCALAR(rudder_pid_i,         "RUDDER_PID_I", 0.2),
     GSCALAR(rudder_pid_d,         "RUDDER_PID_D", 0.5),
+    GSCALAR(rudder_dead_zone,      "RUDDER_S_DEAD", 15)
   
 };
 

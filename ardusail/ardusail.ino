@@ -115,8 +115,8 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
         {gps_update,                10,100},
         { gcs_send_attitude,        1,   200 },
         { gcs_send_heartbeat,		50,	  100},
-      //{ gcs_send_servo_out, 5,         200},
-      //{ gcs_send_servo_in, 5,         200},		
+        { gcs_send_servo_out, 5,         200},
+        { gcs_send_servo_in, 5,         200},		
         { gcs_send_position, 5,         200},
        // {gcs_send_hil_control,10,200},
         {gcs_send_navcontroller,20,200}
@@ -152,6 +152,10 @@ void setup() {
     rudderChannel.init(6,1);
     sailChannel.init(7,2);
     auxChannel.init(8,3);
+    
+    rudderChannel.setDeadZone(g.rudder_dead_zone);
+    sailChannel.setDeadZone(g.rudder_dead_zone);
+    auxChannel.setDeadZone(g.rudder_dead_zone);
     
      mission.init();
      mission.DebugPrint();
