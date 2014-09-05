@@ -40,11 +40,18 @@ struct Info {
     
     bool save(bool force_save=false);
     
-    static uint8_t              type_size(enum as_var_type type);
-
-	static void setup_sketch_defaults(void);
+    static uint8_t type_size(enum as_var_type type);
     static void set_value(enum as_var_type type, void *ptr, float value);
     
+	static void setup_sketch_defaults(void);
+    
+   const struct Info *         find_var_info();
+
+
+
+    void copy_name_token(char *buffer, uint8_t bufferSize) const;
+
+
     float cast_to_float(enum as_var_type type)const;
     
     static uint8_t count(){

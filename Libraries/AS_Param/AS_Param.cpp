@@ -1,5 +1,7 @@
 
+#include <Arduino.h>
 #include "AS_Param.h"
+
 // number of rows in the _var_info[] table
 uint8_t AS_Param::_num_vars;
 
@@ -24,6 +26,36 @@ bool AS_Param::save(bool force_save){
 
 
 }
+
+void AS_Param::copy_name_token( char *buffer, uint8_t buffer_size) const
+{
+    
+   const struct AS_Param::Info *info = find_var_info();
+    if (info == NULL) {
+        *buffer = 0;
+        return;
+    }
+    strncpy(buffer, info->param_name, buffer_size);
+    
+    
+}
+
+
+
+const struct AS_Param::Info *AS_Param::find_var_info()
+{
+    for (uint8_t i=0; i<_num_vars; i++) {
+        void *ptr = (void*)_var_info[i].ptr;
+        if (ptr==this)
+        {
+            return &_var_info[i];
+        }
+            
+    }
+    return 0;
+}
+
+
 
 /// cast a variable to a float given its type
 float AS_Param::cast_to_float(enum as_var_type type) const

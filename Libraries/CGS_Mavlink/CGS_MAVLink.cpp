@@ -295,7 +295,7 @@ void CGS_MAVLink::handleParameters_request_list(mavlink_message_t * msg){
     
 void CGS_MAVLink::sendParameter(uint16_t idx){
 
-      mavlink_message_t msg;
+    mavlink_message_t msg;
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 
     enum as_var_type p_type;
@@ -304,9 +304,8 @@ void CGS_MAVLink::sendParameter(uint16_t idx){
     AS_Param * vp = AS_Param::getByIndex(idx,&p_type);
 
     float value =  vp->cast_to_float(p_type);
-/*static inline uint16_t mavlink_msg_param_value_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               const char *param_id, float param_value, uint8_t param_type, uint16_t param_count, uint16_t param_index)
-*/
+
+
     char buffer [16];
     itoa (idx,buffer,10);
     mavlink_msg_param_value_pack(100,200,&msg, buffer,value,p_type,_params_to_send,idx );
