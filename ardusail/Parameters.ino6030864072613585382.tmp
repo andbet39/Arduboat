@@ -1,0 +1,18 @@
+
+/*
+struct Info {   
+    uint8_t key;
+   	PARAM_TYPE type;
+ 	void *ptr;
+    char param_name[16];
+};
+*/
+
+
+const AS_Param::Info var_info[] PROGMEM = {
+   {k_param_format_version,PTYPE_INT32, 0, "FORMAT_VERSION"},
+   {k_rudd_pid_p, PTYPE_FLOAT, 0, "RUDDER_PID_P"},
+   {k_rudd_pid_i, PTYPE_FLOAT, 0, "RUDDER_PID_I"},
+   {k_rudd_pid_d, PTYPE_FLOAT, 0, "RUDDER_PID_D"}
+   
+};

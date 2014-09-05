@@ -1,9 +1,0 @@
-{
-    "arduino_folder": "/Applications/Arduino.app", 
-    "build_folder": "/Users/andreaterzani/Desktop/Arduino/master_sail", 
-    "full_compilation": true, 
-    "platform": 1, 
-    "platform_name": "Arduino AVR Boards", 
-    "serial_port": 0, 
-    "set_bare_gcc_only": false
-}

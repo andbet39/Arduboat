@@ -33,13 +33,16 @@ void switch_mode(int navmode){
 			nav_bearing = curr_heading;
 			current_nav_mode=NAV_MODE_HEADHOLD;
 			rudderChannel.fixCenterPos();
-			 
+			headingPID.ResetI();
 			Setpoint=nav_bearing;
 		break;
 
                 case NAV_MODE_AUTO:
                         Serial.print("\n Switched to MISSION");
                         current_nav_mode=NAV_MODE_AUTO;
+                        			
+                       headingPID.ResetI();
+
                         mission.start();
                         
                         

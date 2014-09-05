@@ -16,7 +16,7 @@ void gcs_send_position(void){
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 	uint32_t timestamp = millis();
 	
-	mavlink_msg_global_position_int_pack(100,200, &msg,timestamp, gps.lat,gps.lon,gps.alt,0,0,0,0, gps.angle);
+	mavlink_msg_global_position_int_pack(g.sysid_this_mav,200, &msg,timestamp, gps.lat,gps.lon,gps.alt,0,0,0,0, gps.angle);
 	
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
@@ -56,7 +56,7 @@ void gcs_send_heartbeat(void){
 	mavlink_message_t msg; 
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 	
-	mavlink_msg_heartbeat_pack(100, 200, &msg, system_type, autopilot_type,base_mode,custom_mode,system_status);
+	mavlink_msg_heartbeat_pack(g.sysid_this_mav, 200, &msg, system_type, autopilot_type,base_mode,custom_mode,system_status);
 	
 	// Copy the message to send buffer 
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
@@ -83,7 +83,7 @@ void gcs_send_attitude(){
 	float radRoll = toRadians(-sensor.roll);
 	float radPitch = toRadians(-sensor.pitch);
 	
-	mavlink_msg_attitude_pack(100,200, &msg, timestamp,  radRoll,  radPitch, radHeading , 0, 0, 0);
+	mavlink_msg_attitude_pack(g.sysid_this_mav,200, &msg, timestamp,  radRoll,  radPitch, radHeading , 0, 0, 0);
 	
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
@@ -106,7 +106,7 @@ void gcs_send_navcontroller(){
 	uint32_t timestamp = millis();
 	
 	
-	mavlink_msg_nav_controller_output_pack(100,200, &msg,  0,  0, curr_heading , nav_bearing, nav_distance, 0,0,0);
+	mavlink_msg_nav_controller_output_pack(g.sysid_this_mav,200, &msg,  0,  0, curr_heading , nav_bearing, nav_distance, 0,0,0);
 	                           
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
@@ -124,7 +124,7 @@ void gcs_send_servo_out(){
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 	
 	
-	mavlink_msg_servo_output_raw_pack(100,200, &msg,millis(),1,  rudderChannel.getPwmOut(), sailChannel.getPwmOut(),UINT16_MAX ,UINT16_MAX,auxChannel.getPwmOut(),  UINT16_MAX ,UINT16_MAX ,UINT16_MAX);
+	mavlink_msg_servo_output_raw_pack(g.sysid_this_mav,200, &msg,millis(),1,  rudderChannel.getPwmOut(), sailChannel.getPwmOut(),UINT16_MAX ,UINT16_MAX,auxChannel.getPwmOut(),  UINT16_MAX ,UINT16_MAX ,UINT16_MAX);
 	
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
@@ -154,7 +154,7 @@ void gcs_send_servo_in(){
 
 	//Serial.print("PWMIN: ");	Serial.print(ch1Scaled);
 
-	mavlink_msg_rc_channels_scaled_pack(100,200, &msg,millis(),1,  ch1Scaled,ch2Scaled,UINT16_MAX ,UINT16_MAX,ch3Scaled,  UINT16_MAX ,UINT16_MAX ,UINT16_MAX,255);
+	mavlink_msg_rc_channels_scaled_pack(g.sysid_this_mav,200, &msg,millis(),1,  ch1Scaled,ch2Scaled,UINT16_MAX ,UINT16_MAX,ch3Scaled,  UINT16_MAX ,UINT16_MAX ,UINT16_MAX,255);
 	
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
@@ -173,7 +173,7 @@ void gcs_send_mission_current(){
 	mavlink_message_t msg;
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 	
-        mavlink_msg_mission_current_pack(100,200, &msg,mission.currentId());
+        mavlink_msg_mission_current_pack(g.sysid_this_mav,200, &msg,mission.currentId());
 						       
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
@@ -193,7 +193,7 @@ void gcs_send_mission_reached(){
 	mavlink_message_t msg;
 	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 	
-	mavlink_msg_mission_item_reached_pack(100,200, &msg,mission.currentId());
+	mavlink_msg_mission_item_reached_pack(g.sysid_this_mav,200, &msg,mission.currentId());
 				       
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
@@ -215,7 +215,7 @@ void gcs_send_hil_control(){
 	float rudder= rudderChannel.getControl();
 	float sail= sailChannel.getControl();
 	float aux= auxChannel.getControl();
-	mavlink_msg_hil_controls_pack(100, 200, &msg,millis(), 0, 0, rudder, sail, aux, 0,0, 0, 0, 0);
+	mavlink_msg_hil_controls_pack(g.sysid_this_mav, 200, &msg,millis(), 0, 0, rudder, sail, aux, 0,0, 0, 0, 0);
 
 	uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
 	
@@ -308,13 +308,16 @@ void gcs_update(){
                                 case MAVLINK_MSG_ID_PARAM_REQUEST_LIST:
                                      Serial.print("MAVLINK_MSG_ID_PARAM_REQUEST_LIST \n");
                                       gcs.handleParameters_request_list(&msg);
-
+                       
+                                break;
                                 
+                                case MAVLINK_MSG_ID_PARAM_SET:
+                                    Serial.print("MAVLINK_MSG_ID_PARAM_SET \n");
+                                    gcs.handleParam_set_Message(&msg);
                                 break;
                                 
                                  case 109:
                                      
-                                
                                 break;
                                
                                

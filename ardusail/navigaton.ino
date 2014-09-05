@@ -44,9 +44,9 @@ void init_navigation(){
 			
 		}
 		Input=curr_heading;
-		
+	        headingPID.SetTunings( g.rudder_pid_p,g.rudder_pid_i,g.rudder_pid_d);
+
 		headingPID.Compute();
-		
 		
 		int16_t center=rudderChannel.center();
 		

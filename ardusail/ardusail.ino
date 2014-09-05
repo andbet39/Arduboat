@@ -71,7 +71,7 @@ FastSerialPort3(Serial3);
 
 double Setpoint, Input, Output;
 
-double consKp=g.rudder_pid_p, consKi=0.2, consKd=0.5;
+double consKp=g.rudder_pid_p, consKi=g.rudder_pid_i, consKd=g.rudder_pid_d;
 
 
 PID headingPID(&Input, &Output, &Setpoint,consKp,consKi,consKd, REVERSE);
@@ -113,12 +113,12 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
 	{ update_heading,            2,   100 },
 	{ check_nav_mode,             10,   100 },
         {gps_update,                10,100},
-        { gcs_send_attitude,        5,   200 },
+        { gcs_send_attitude,        1,   200 },
         { gcs_send_heartbeat,		50,	  100},
       //{ gcs_send_servo_out, 5,         200},
       //{ gcs_send_servo_in, 5,         200},		
         { gcs_send_position, 5,         200},
-        {gcs_send_hil_control,10,200},
+       // {gcs_send_hil_control,10,200},
         {gcs_send_navcontroller,20,200}
       	
 	//{gcs_update,1,200}
@@ -126,7 +126,7 @@ static const AS_Scheduler::Task scheduler_tasks[] = {
 
 };
 
-AS_Param param_loader(var_info, 4);
+AS_Param param_loader(var_info, COUNT_ADDRESS);
 
 void setup() {
       
@@ -137,10 +137,14 @@ void setup() {
       
       AS_Param::setup_sketch_defaults();
 
+      load_parameters();
       
       current_nav_mode=NAV_MODE_MANUAL;
       
+      
       headingPID.SetOutputLimits(-300,300);
+      headingPID.SetTunings( g.rudder_pid_p,g.rudder_pid_i,g.rudder_pid_d);
+ 
       gcs.init();
       gps.init();
       

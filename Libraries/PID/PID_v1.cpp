@@ -37,6 +37,9 @@ PID::PID(double* Input, double* Output, double* Setpoint,
     lastTime = millis()-SampleTime;				
 }
  
+ void PID::ResetI(){
+    ITerm=0;
+ }
  
 /* Compute() **********************************************************************
  *     This, as they say, is where the magic happens.  this function should be called

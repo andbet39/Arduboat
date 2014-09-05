@@ -291,6 +291,75 @@ void CGS_MAVLink::handleParameters_request_list(mavlink_message_t * msg){
     }
 }
 
+void CGS_MAVLink::handleParam_set_Message(mavlink_message_t * msg){
+
+
+    AS_Param *vp;
+    enum as_var_type var_type;
+
+    mavlink_param_set_t packet;
+    mavlink_msg_param_set_decode(msg, &packet);
+    Serial.printf("Receved key : %s\n",packet.param_id );
+          
+    char key[MAX_PARAM_NAME_SIZE+1];
+    strncpy(key, (char *)packet.param_id, MAX_PARAM_NAME_SIZE);
+    key[MAX_PARAM_NAME_SIZE] = 0;
+
+
+    // find the requested parameter
+    vp = AS_Param::find(key, &var_type);
+
+    if (NULL != vp){  
+         float rounding_addition = 0.00;
+        
+  
+        if (var_type == AS_PTYPE_FLOAT) {
+            ((AS_Float *)vp)->set_and_save(packet.param_value);
+        } else if (var_type == AS_PTYPE_INT32) {
+            if (packet.param_value < 0) rounding_addition = -rounding_addition;
+            float v = packet.param_value+rounding_addition;
+            v = constrain_float(v, -2147483648.0, 2147483647.0);
+
+            ((AS_Int32 *)vp)->set_and_save(v);
+        } else if (var_type == AS_PTYPE_INT16) {
+            if (packet.param_value < 0) rounding_addition = -rounding_addition;
+            float v = packet.param_value+rounding_addition;
+            v = constrain_float(v, -32768, 32767);
+
+            Serial.printf("Received : %f of type AS_PTYPE_INT16 \n ",packet.param_value);
+
+            ((AS_Int16 *)vp)->set_and_save(v);
+        } else if (var_type == AS_PTYPE_INT8) {
+            if (packet.param_value < 0) rounding_addition = -rounding_addition;
+            float v = packet.param_value+rounding_addition;
+            v = constrain_float(v, -128, 127);
+
+            ((AS_Int8 *)vp)->set_and_save(v);
+        } else {
+            // we don't support mavlink set on this parameter
+            return;
+        }
+
+        Serial.printf("Received : %f of type :%d \n ",vp->cast_to_float(var_type),toMAV_ParamType(var_type) );
+
+        mavlink_message_t msg;
+        uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+        
+        float value =  vp->cast_to_float(var_type);
+
+        mavlink_msg_param_value_pack(100,200,&msg, key,vp->cast_to_float(var_type),toMAV_ParamType(var_type),AS_Param::count(),-1 );
+    
+        uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+    
+        #if USE_TELEMETRY   
+                Serial3.write(buf, len);
+        #else
+                Serial.write(buf, len);
+        #endif 
+    }
+
+}
+
 
     
 void CGS_MAVLink::sendParameter(uint16_t idx){
@@ -299,16 +368,19 @@ void CGS_MAVLink::sendParameter(uint16_t idx){
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
 
     enum as_var_type p_type;
-    p_type=AS_PTYPE_FLOAT;
-
+    
     AS_Param * vp = AS_Param::getByIndex(idx,&p_type);
 
     float value =  vp->cast_to_float(p_type);
 
+    Serial.printf("Value : %f of type :%d \n ",value,toMAV_ParamType(p_type) );
+    char param_name[MAX_PARAM_NAME_SIZE+1];
 
-    char buffer [16];
-    itoa (idx,buffer,10);
-    mavlink_msg_param_value_pack(100,200,&msg, buffer,value,p_type,_params_to_send,idx );
+    vp->copy_name_token(param_name,MAX_PARAM_NAME_SIZE);
+        
+    //mavlink_msg_param_value_pack(100,200,&msg, param_name,value,toMAV_ParamType(p_type) ,_params_to_send,idx );
+    mavlink_msg_param_value_pack(100,200,&msg, param_name,value,9,_params_to_send,idx );
+
     
     uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
     
@@ -340,6 +412,24 @@ if( _sendingParameter){
 
 
 
+uint8_t CGS_MAVLink::toMAV_ParamType(enum as_var_type type){
 
+    switch (type) {
+        case AS_PTYPE_INT32:
+            return MAVLINK_TYPE_INT32_T;
+        case AS_PTYPE_INT16:
+            return MAVLINK_TYPE_INT16_T;
+        case AS_PTYPE_UINT32:
+            return MAVLINK_TYPE_UINT32_T;
+        case AS_PTYPE_FLOAT:
+            return MAVLINK_TYPE_FLOAT;
+        case AS_PTYPE_INT8:
+            return MAVLINK_TYPE_INT8_T;
+        case AS_PTYPE_UINT8:
+            return MAVLINK_TYPE_UINT8_T;
+    }
+
+    return MAVLINK_TYPE_FLOAT;
+}
 
 

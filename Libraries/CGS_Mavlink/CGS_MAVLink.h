@@ -12,6 +12,7 @@
 #include "../AS_HILSensor/AS_HILSensor.h"
 #include "../AS_GPS/AS_GPS.h"
 #include "../AS_Sensor/AS_Sensor.h"
+#include "../AS_Math/AS_Math.h"
 
 #include "include/mavlink/v1.0/mavlink_types.h"
 #include "include/mavlink/v1.0/common/mavlink.h"
@@ -40,9 +41,13 @@ public:
 	void sendMissionItem(AS_Mission * mission,uint16_t cmd_num);
 
 	void handleParameters_request_list(mavlink_message_t * msg);
+	void handleParam_set_Message(mavlink_message_t * msg);
 	void sendParameter(uint16_t idx);
 	void update();
 private:
+
+
+	uint8_t toMAV_ParamType(enum as_var_type type);
 
 	bool isReceiving;
 	bool isSending;

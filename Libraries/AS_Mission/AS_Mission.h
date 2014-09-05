@@ -16,8 +16,8 @@
 
 #define NUM_COMMANDS 4
 #define CMD_SIZE 8
-#define BASE_ADDRESS 100
-#define COUNT_ADDRESS 98
+#define BASE_ADDRESS 1000
+#define COUNT_ADDRESS 999
 
 
 

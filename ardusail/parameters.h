@@ -21,7 +21,9 @@ public:
     enum {
         // Layout version number, always key zero.
         //
-        k_param_sysid_this_mav = 0,
+        k_param_format_version = 0,
+        k_param_software_type,
+        k_param_sysid_this_mav,
         k_param_rudder_pid_p,
         k_param_rudder_pid_i,
         k_param_rudder_pid_d
@@ -29,9 +31,11 @@ public:
     };
     
   
+    AS_Int16 format_version;
+    AS_Int8 software_type;
     // Telemetry control
     //
-    AS_Int32 sysid_this_mav;
+    AS_Int16 sysid_this_mav;
     AS_Float rudder_pid_p;
     AS_Float rudder_pid_i;
     AS_Float rudder_pid_d;
